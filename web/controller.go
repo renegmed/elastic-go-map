@@ -44,9 +44,24 @@ func RegisterRoutes() *gin.Engine {
 
 	})
 
-	r.GET("/geodata/consumer/:id", func(c *gin.Context) {
+	r.GET("/geodata/consumer/:id/:distance/:unit", func(c *gin.Context) {
 		id := c.Param("id")
-		//fmt.Printf("    id: %s\n", id)
+		distance := c.Param("distance")
+		if distance == "" {
+			distance = "1000000"
+		}
+		unit := c.Param("unit")
+		if unit == "" {
+			unit = "km"
+		}
+
+		// fmt.Printf("    id: %s distance: $s,  unit: %s\n", id, distance, unit)
+
+		numDistance, err := strconv.ParseInt(distance, 10, 64)
+		if err != nil {
+			c.String(http.StatusNotFound, "404 - distance is invalid.")
+			return
+		}
 
 		consClient, err := elastic.NewConsumerClient()
 		if err != nil {
@@ -72,7 +87,7 @@ func RegisterRoutes() *gin.Engine {
 			return
 		}
 
-		producers, err := prodClient.LocateProducers(consumer, 100000, "km")
+		producers, err := prodClient.LocateProducers(consumer, numDistance, unit)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			c.String(http.StatusNotFound, "404 - producers creation failed.")
@@ -81,7 +96,7 @@ func RegisterRoutes() *gin.Engine {
 
 		geoData := elastic.NewConsumerProducersGeoData(consumers, producers)
 
-		//fmt.Printf("    geoData: %v\n", geoData)
+		// fmt.Printf("    geoData: %v\n", geoData)
 
 		c.JSON(http.StatusOK, geoData)
 
@@ -269,7 +284,7 @@ func RegisterRoutes() *gin.Engine {
 			return
 		}
 
-		//fmt.Printf("++++ Customer ID: %s, Distance: %d, Unit: %s\n", id, numDistance, unit)
+		// fmt.Printf("++++ Customer ID: %s, Distance: %d, Unit: %s\n", id, numDistance, unit)
 
 		consumer, err := getConsumer(id)
 		if err != nil {
@@ -333,6 +348,8 @@ func RegisterRoutes() *gin.Engine {
 		params := map[string]interface{}{
 			"consumer":  consumer,
 			"producers": producers,
+			"distance":  distance,
+			"unit":      unit,
 			"apiKey":    GOOGLE_MAP_API_KEY,
 		}
 		c.HTML(http.StatusOK, "producersmap.html", params)

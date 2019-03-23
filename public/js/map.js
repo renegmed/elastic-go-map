@@ -120,8 +120,8 @@ const mapStyle = [
   }
    
  
-  initMap = async (consumerAccount, latitude, lontitude) => { 
-     
+  initMap = async (consumerAccount, latitude, lontitude, distance, unit) => {  
+
     const map = new google.maps.Map(document.getElementById('container'), {
       zoom: 13,
       center: {lat: latitude, lng: lontitude}, 
@@ -131,7 +131,7 @@ const mapStyle = [
     //FILE READER - map.data.loadGeoJson('/public/geoData.json');
     
     // call api
-    await map.data.loadGeoJson('/geodata/consumer/' + consumerAccount);
+    await map.data.loadGeoJson('/geodata/consumer/' + consumerAccount + '/' + distance + '/' + unit);
    
     // Define the custom marker icons, using the store's "category".
     map.data.setStyle(feature => {

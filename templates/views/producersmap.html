@@ -6,8 +6,8 @@
 {{template "pageFooter.html" .}} 
 <script src="/public/js/map.js"></script> 
 <script> 
-  function initializeMap() {   
-    initMap({{ .consumer.Account}}, {{ .consumer.Location.Lat}}, {{ .consumer.Location.Lon}});  
+  function initializeMap() {    
+    initMap({{ .consumer.Account}}, {{ .consumer.Location.Lat}}, {{ .consumer.Location.Lon}}, {{.distance}}, {{.unit}});  
   }
      
 </script>
