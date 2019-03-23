@@ -1,0 +1,229 @@
+{{template "pageStart.html" .}} 
+{{template "pageHeader.html" .}} 
+<div class="container">
+  <div class="row">
+  Client-Supplier Monitoring System
+  </div>
+  <form class="form-horizontal" method="post">
+    <div class="row"> 
+        <div>
+        <label for="index">Account:</label>
+          <select name="account" id="account" class="browser-default custom-select" >
+            <option value="33324">KRB Foods - 33324</option>
+            <option value="44544">KFC - 44544</option>   
+          </select> 
+        </div>  
+    </div>
+    <div class="row">  
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-sm btn-style" 
+        id="chart" 
+        name="btn-display" 
+        value="chart">Gantt Chart</button>
+      
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-sm btn-style" 
+        id="map" 
+        name="btn-display" 
+        value="map">Display Map</button>    
+    </div>
+
+    <div class="row">
+    <div id="container" class="col-md-8"> 
+    </div>
+    </div>
+  </form>
+</div>  
+{{template "pageFooter.html" .}} 
+
+{{if .isMap}}
+  <script>
+
+      function initMap() {    
+        var map = new google.maps.Map(document.getElementById('container'),
+          {center: new google.maps.LatLng({{ .consumer.Location.Lat}}, {{ .consumer.Location.Lon}}), zoom: 13 });
+  
+
+        //var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+        var iconBase = '/public/images/'
+        //var iconBase = '/Users/rene/learn/go-workspace/src/project-match/public/images/'
+        var icons = {
+          farm: {
+            icon: iconBase + 'leaf-icon-29.png'
+          },
+          factory: {
+            icon: iconBase + 'factory-blue-icon.png'
+          },
+          info: {
+            icon: iconBase + 'info-i_maps.png'
+          }
+        };
+
+
+        var contentString = '<div id="content">'+
+          '<div id="siteNotice">'+
+          '</div>'+
+          '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+          '<div id="bodyContent">'+
+          '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+          'sandstone rock formation in the southern part of the '+
+          'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+          'south west of the nearest large town, Alice Springs; 450&#160;km '+
+          '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+          'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+          'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+          'Aboriginal people of the area. It has many springs, waterholes, '+
+          'rock caves and ancient paintings. Uluru is listed as a World '+
+          'Heritage Site.</p>'+
+          '<p>Attribution: Uluru, <a href="/consumer/33324/producersmap/10/km">'+
+          'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+          '(last visited June 22, 2009).</p>'+
+          '</div>'+
+          '</div>';
+
+        // var features = [{{range .producers}} {
+        //     position: new google.maps.LatLng({{ .Location.Lat}}, {{ .Location.Lon}}),
+        //     type: {{ .Icon}} 
+        //   },{{end}} 
+        // ];  
+ 
+        // var infowindow = new google.maps.InfoWindow({
+        //   content: contentString
+        // });
+
+        // // Create markers.
+        // for (var i = 0; i < features.length; i++) {
+        //   var marker = new google.maps.Marker({
+        //     position: features[i].position,
+        //     icon: icons[features[i].type].icon,
+        //     map: map,
+        //     title: '+++ Some Title +++' 
+        //   });
+        //   marker.addListener('click', function() {
+        //     infowindow.open(map, marker);
+        //   });
+        // };
+
+
+
+
+        // var features = [{{range .producers}} {
+        //     position: new google.maps.LatLng({{ .Location.Lat}}, {{ .Location.Lon}}),
+        //     type: {{ .Icon}},
+        //     title: '{{ .Name}}',
+        //     content: "<div>{{ .Name}}</div>" 
+        //   },{{end}} 
+        // ];  
+   
+        // // Create markers.
+        // for (var i = 0; i < features.length; i++) {
+        //   var marker = new google.maps.Marker({
+        //     position: features[i].position,
+        //     icon: icons[features[i].type].icon,
+        //     map: map,
+        //     title: features[i].title 
+        //   });
+          
+        //   var infowindow = new google.maps.InfoWindow({
+        //         content: features[i].content
+        //   });
+        //   marker.addListener('click', function() {            
+        //     infowindow.open(map, marker);
+        //   });
+        // };
+
+
+        var features = new Array();
+        var infowindows = new Array();
+        {{range .producers}}
+
+          features.push({
+              position: new google.maps.LatLng({{ .Location.Lat}}, {{ .Location.Lon}}),
+              type: {{ .Icon}},
+              title: '{{ .Name}}' 
+            }); 
+
+          infowindows.push(new google.maps.InfoWindow({
+                  content: "<div>{{ .Name}}</div>"
+          }));
+
+        {{end}}
+
+
+        // Create markers.
+        for (var i = 0; i < features.length; i++) {
+          var marker = new google.maps.Marker({
+            position: features[i].position,
+            icon: icons[features[i].type].icon, 
+            map: map,
+            label: features[i].title 
+          });
+          
+          var infowindow = infowindows[i];
+
+          //console.log("++++++", infowindow.content);
+
+          marker.addListener('click', function()  {            
+            infowindow.open(map, marker);
+          });
+        };
+
+        // // Create an array of alphabetical characters used to label the markers.
+        // var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';    
+        // // Add some markers to the map.
+        // // Note: The code uses the JavaScript Array.prototype.map() method to
+        // // create an array of markers based on a given "locations" array.
+        // // The map() method here has nothing to do with the Google Maps API.
+        // var markers = locations.map(function(location, i) {
+        //   return new google.maps.Marker({
+        //     position: location,
+        //     label: labels[i % labels.length]
+        //   });
+        // });   
+        // Add a marker clusterer to manage the markers.
+
+        // var markerCluster = new MarkerClusterer(map, features,
+        //     {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'}); 
+          
+      }
+    
+      // var locations = [{{range .producers}}
+      //     {lat: {{ .Location.Lat}}, lng: {{ .Location.Lon}} }, {{end}} 
+      // ]
+
+      //google.maps.event.addDomListener(window, 'load', initMap); 
+  </script>
+
+  <!-- script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+  </script -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{.apiKey}}&callback=initMap">
+  </script>
+{{end}}
+
+{{if .isChart}}
+  <script> 
+    Highcharts.ganttChart('container', {
+      title: {
+          text:  '{{ .consumer.Category}} Producers Schedules'
+      }, 
+      series: [{
+          name: '{{ .Category}}',
+          data: [{{range .ganttBars}}{ {{if .IsHeader}}
+                     id: {{ .Id}},
+                     name: {{ .Name}}, 
+                  {{else}}
+                     id: {{ .Id}},
+                     name: {{ .Name}},  
+                     start: Date.UTC({{ .StartYear}}, {{ .StartMonth}}, {{ .StartDay}}),
+                     end: Date.UTC({{ .EndYear}}, {{ .EndMonth}}, {{ .EndDay}}) {{end}}
+              }, {{end}}
+          ]
+      }]
+    }); 
+  </script>
+{{end}}
+
+{{template "pageEnd.html" .}}  

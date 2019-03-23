@@ -1,0 +1,19 @@
+{{template "pageStart.html" .}} 
+{{template "pageHeader.html" .}}  
+
+<div id="container"/> 
+  
+{{template "pageFooter.html" .}} 
+<script src="/public/js/map.js"></script> 
+<script> 
+  function initializeMap() {   
+    initMap({{ .consumer.Account}}, {{ .consumer.Location.Lat}}, {{ .consumer.Location.Lon}});  
+  }
+     
+</script>
+ 
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key={{.apiKey}}&callback=initializeMap">
+</script> 
+
+{{template "pageEnd.html" .}}  

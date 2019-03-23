@@ -1,0 +1,75 @@
+[
+ { "account": "12345", 
+    "name": "ABC Farm Inc.", 
+    "category": "soy bean",  
+    "startdate": "2019-01-15", 
+    "enddate": "2019-03-15", 
+    "location": { 
+        "lat": 40.741895, 
+        "lon": -73.989308 }, 
+    "quantity": 1.00,
+    "icon": "farm",
+    "client": "33324"
+    
+ },
+ {  "account": "56789", 
+    "name": "F5 Inc.", 
+    "category": "soy bean",
+    "startdate": "2019-02-01", 
+    "enddate": "2019-03-30", 
+    "location": { 
+        "lat": 40.74519, 
+        "lon": -73.906291}, 
+    "quantity": 0.75,
+    "icon": "farm",
+    "client": "33324" 
+ },
+ { "account": "15003", 
+    "name": "XYZ Food Industry", 
+    "category": "sweet potato",  
+    "startdate":"2019-02-01", 
+    "enddate":"2019-03-30", 
+    "location": { 
+        "lat": 40.714655, 
+        "lon": -73.907239},  
+    "quantity": 1.20,
+    "icon": "farm",
+    "client": "33324" 
+ },
+ {  "account": "75752", 
+    "name": "W&W Food Corp.", 
+    "category":"soy bean",
+    "startdate":"2019-10-01", 
+    "enddate":"2019-12-31", 
+    "location": { 
+        "lat": 40.686496, 
+        "lon": -73.977664}, 
+    "quantity": 0.50,
+    "icon": "farm",
+    "client": "33324" 
+ },
+ { "account": "44344", 
+    "name": "J. Deer Inc.", 
+    "category":"soy bean",
+    "startdate":"2019-03-15", 
+    "enddate":"2019-08-15", 
+    "location": { 
+        "lat": 40.695477, 
+        "lon": -73.98792}, 
+    "quantity": 2.50,
+    "icon": "farm", 
+    "client": "33324" 
+ },   
+ { "account": "18875", 
+    "name": "Acme Food Farm", 
+    "category": "soy bean",
+    "startdate": "2018-11-15", 
+    "enddate": "2019-01-25", 
+    "location": { 
+        "lat": 40.701462, 
+        "lon": -74.056668}, 
+    "quantity": 3.00,
+    "icon": "farm",
+    "client": "33324" 
+ }
+]
